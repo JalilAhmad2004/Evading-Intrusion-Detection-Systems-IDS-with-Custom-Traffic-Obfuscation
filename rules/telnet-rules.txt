@@ -1,0 +1,11 @@
+alert tcp any any -> any 23 (msg:"Telnet - Connection Attempt Detected"; flags:S; sid:300001; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Login Detected"; content:"login:"; nocase; sid:300002; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Password Prompt Detected"; content:"Password:"; nocase; sid:300003; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Suspicious Command Execution"; content:"rm -rf"; nocase; sid:300004; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Unauthorized Access Attempt"; pcre:"/user|root|admin/i"; sid:300005; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Long Payload Detected"; dsize:>512; sid:300007; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Brute Force Attempt"; threshold:type both, track by_src, count 5, seconds 60; content:"login:"; nocase; sid:300008; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Default Credentials Used"; content:"admin"; content:"1234"; distance:0; sid:300009; rev:1;)
+alert tcp any any -> any 23 (msg:"Telnet - Potential Backdoor Command"; content:"nc -l"; nocase; sid:300010; rev:1;)
+
+

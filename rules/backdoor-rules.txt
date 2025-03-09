@@ -1,0 +1,11 @@
+#Backdoor Rules: "backdoor.rules"
+alert tcp $EXTERNAL_NET 27374 -> $HOME_NET any (msg:"BACKDOOR subseven 22"; content:"|0D 0A|[RPL]002|0D 0A|"; reference:arachnids,485; reference:url,www.hackfix.org/subseven/; classtype:misc-activity; sid:103; rev:7;)
+
+alert tcp $HOME_NET 16959 -> $EXTERNAL_NET any (msg:"BACKDOOR subseven DEFCON8 2.1 access"; content:"PWD"; classtype:trojan-activity; sid:107; rev:6;)
+alert tcp $HOME_NET 12345:12346 -> $EXTERNAL_NET any (msg:"BACKDOOR netbus active"; content:"NetBus"; reference:arachnids,401; classtype:misc-activity; sid:109; rev:5;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET 12345:12346 (msg:"BACKDOOR netbus getinfo"; content:"GetInfo|0D|"; reference:arachnids,403; classtype:misc-activity; sid:110; rev:4;)
+
+alert udp $EXTERNAL_NET any -> $HOME_NET 2140 (msg:"BACKDOOR DeepThroat 3.1 Connection attempt"; content:"00"; depth:2; reference:mcafee,98574; reference:nessus,10053; classtype:misc-activity; sid:1980; rev:4;)
+alert udp $HOME_NET 2140 -> $EXTERNAL_NET any (msg:"BACKDOOR DeepThroat 3.1 Server Response"; content:"Ahhhh My Mouth Is Open"; reference:arachnids,106; reference:mcafee,98574; reference:nessus,10053; classtype:misc-activity; sid:195; rev:7;)
+alert udp $HOME_NET 3150 -> $EXTERNAL_NET any (msg:"BACKDOOR DeepThroat 3.1 Server Response [3150]"; content:"Ahhhh My Mouth Is Open"; reference:arachnids,106; reference:mcafee,98574; reference:nessus,10053; classtype:misc-activity; sid:1982; rev:3;)
+alert udp $EXTERNAL_NET any -> $HOME_NET 3150 (msg:"BACKDOOR DeepThroat 3.1 Connection attempt [3150]"; content:"00"; depth:2; reference:mcafee,98574; reference:nessus,10053; classtype:misc-activity; sid:1981; rev:3;)

@@ -1,0 +1,29 @@
+
+
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt - UNION"; content:"union select"; nocase; sid:100002; rev:1;)
+
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt - Basic SQL Keywords"; content:"select "; nocase; pcre:"/select|insert|update|delete|union|drop|alter/i"; sid:100001; rev:1;)
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt - Boolean OR"; content:" or "; nocase; pcre:"/ or [0-9]='[0-9]'/i"; sid:100003; rev:1;)
+
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt Detected"; content:"SELECT"; nocase; content:"FROM"; nocase; sid:1000002; rev:1;)
+
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt Detected"; content:"SELECT"; nocase; sid:1000002; rev:1;)
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt"; content:"SELECT * FROM USERS"; nocase; sid:1000001; rev:1;)
+
+
+alert tcp $EXTERNAL_NET any -> $SQL_SERVERS 3306 (msg:"MYSQL root login attempt"; flow:to_server,established; content:"|0A 00 00 01 85 04 00 00 3306|root|00|"; classtype:protocol-command-decode; sid:1775; rev:2;)
+
+alert tcp $EXTERNAL_NET any -> $SQL_SERVERS 3306 (msg:"MYSQL show databases attempt"; flow:to_server,established; content:"|0F 00 00 00 03|show databases"; classtype:protocol-command-decode; sid:1776; rev:2;)
+
+alert tcp $EXTERNAL_NET any -> $SQL_SERVERS 3306 (msg:"MYSQL 4.0 root login attempt"; flow:to_server,established; content:"|01|"; within:1; distance:3; content:"root|00|"; within:5; distance:5; nocase; classtype:protocol-command-decode; sid:3456; rev:2;)
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt - Tautology"; content:"' or '1'='1"; nocase; sid:100005; rev:1;)
+
+
+alert tcp any any -> any 3306 (msg:"SQL Injection Attempt - Advanced Keywords"; pcre:"/insert.*into.*values|update.*set.*where|select.*from/i"; sid:100010; rev:1;)
